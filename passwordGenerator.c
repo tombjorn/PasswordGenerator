@@ -121,6 +121,7 @@ void generate (int length, char *s3)
         else printf("FAILED");
        
     }
+    
     strcpy(s3, password);
 
 }
