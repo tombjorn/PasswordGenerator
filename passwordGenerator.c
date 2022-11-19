@@ -1,16 +1,19 @@
 #include <stdio.h>
-#include <cs50.h>
+#include <string.h>
 #include <stdlib.h>
 #include <time.h>
-#include <math.h>
 
 
-int generate (int length);
 
-void display (int );
-// todo input username and/or website function
+int length;
 
-// todo append the username and password to a txt file 
+int passwordLength (int length);
+void generate (int length, char *s3);
+
+
+void website (char *s1);
+void username (char *s2);
+
 
 int numberOfArrays = 4;
 
@@ -22,26 +25,71 @@ int numberOfArrays = 4;
 
     char sym [] = {'!', '@', '#', '$', '%', '&', '*', '?', '='};
 
+    
 int main ()
 {
+    // set random seed using time
     srand( time(NULL) );
 
-    printf("Length : ");
-    int length;
-    scanf("%i", &length);
+    length = passwordLength(length);
+
+    //array 'buckets' that will decay into pointers 
+    //  for the strings being made in website + username
+    char ret1 [256];
+    char ret2 [256];
+    char ret3 [256];
+
+    // ? user input of website and username strings, that copy to s1/s2
+    //  ? which are the pointers of ret1/ret2
+    website(ret1);
+    username(ret2); 
+
+    generate (length, ret3);
     
-    generate (length);
+    printf(" WEBSITE : %s\n", ret1);
+    printf("USERNAME : %s\n", ret2);
+    printf("PASSWORD : %s\n", ret3);
 
-    display(length);
-
-
-
-
-return 0;
+    return 0;
 
 }
 
-int generate (int length)
+
+
+void website(char *s1)
+{   
+// create temp array for user input
+    char temp1[256];
+
+    printf("WEBSITE : ");
+    scanf("%256s", temp1);
+
+// temp1 gets binned when website() returns, so copy temp1 to s1
+    strcpy(s1, temp1);
+}
+
+void username(char *s2)
+{   
+    char temp2[256];
+
+    printf("USERNAME : ");
+    scanf("%256s", temp2);
+
+    strcpy(s2, temp2);
+}
+
+int passwordLength (int length)
+{
+    length = 12;
+    do
+    {
+        printf("LENGTH : ");
+        scanf("%i", &length);
+    } while (length < 0 || length > 16);
+    return length;
+}
+
+void generate (int length, char *s3)
 {
     char password[length];
 
@@ -70,18 +118,9 @@ int generate (int length)
             char q = sym[(rand() % sizeof(sym)/sizeof(char)) + 1];
             password [i] = q;
         }
-        else printf("failed");
+        else printf("FAILED");
        
     }
-    return 0;
-}
+    strcpy(s3, password);
 
-void display (length)
-{
-    printf("Password = ");
-    for (int j = 0; j < length; j++)
-    {
-        printf("%c", password[j]);
-    }
-    printf("\n");
 }
